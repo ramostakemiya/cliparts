@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miya & Maya Paper — Vitrine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* =========================================================
+     COMO EDITAR
+     1) Troque os textos dentro de .product-card (nome, tamanho, preço)
+     2) Troque data-link="https://www.etsy.com/..." pelo link real do
+        produto (Etsy, Hubla, ou o que você usar pra pagamento) — fica
+        escondido, só é usado quando clica em "Comprar agora" no card aberto
+     3) Troque data-price pelo valor final em R$ (por enquanto está com
+        valores de exemplo — ajuste manualmente quando decidir o preço)
+     4) Troque data-desc="..." pela descrição completa do produto — só
+        aparece quando o card de detalhes é aberto
+     5) FOTOS REAIS: cada produto já tem um data-images="..." preenchido
+        com 5 caminhos sugeridos, ex:
+        imagens/bundle-clipart-bonecas-kokeshi/1.jpg até 5.jpg
+        Crie essa pasta "imagens/bundle-clipart-bonecas-kokeshi/" ao lado
+        deste HTML e coloque as 5 fotos com esses nomes — ou edite o
+        caminho pra usar a pasta/nome que preferir, o importante é
+        data-images e o arquivo real baterem. Enquanto a foto não existir
+        nesse caminho, a página cai sozinha no placeholder de emoji +
+        gradiente (data-thumb / data-emoji), sem quebrar o layout. Pode
+        usar menos de 5 fotos — é só deixar menos caminhos na lista.
+     6) COMO FUNCIONA A INTERAÇÃO: a miniatura na grade já é um mini-
+        carrossel (setas + bolinhas + arrastar o dedo) com as mesmas 5
+        fotos. Clicar em QUALQUER parte do card — inclusive no botão
+        rosa "+" — abre o card de detalhes, com carrossel maior (clique
+        na foto pra dar zoom), nome, descrição completa, preço e o botão
+        "Comprar agora" (que usa o data-link daquele produto).
+     ========================================================= */
+
+  :root{
+    --cream:#FBF5EF;
+    --cream-2:#F6EEE4;
+    --lilac:#C9AEDD;
+    --lilac-soft:#E9DDF3;
+    --plum:#4A2E52;
+    --plum-deep:#33203A;
+    --pink:#F3D6E2;
+    --pink-strong:#E2A9C4;
+    --text:#3D2A40;
+    --text-soft:#7A6580;
+    --radius-lg:28px;
+    --radius-md:18px;
+    --radius-sm:12px;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(180deg,#F1E7F6 0%, var(--cream) 30%);
+    font-family:'Outfit', sans-serif;
+    color:var(--text);
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 64px;
+  }
+
+  .phone{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    border-radius:36px;
+    box-shadow:0 30px 60px -20px rgba(74,46,82,0.35), 0 0 0 10px #fff, 0 0 0 11px #e9dcf0;
+    overflow:hidden;
+    position:relative;
+  }
+
+  /* ---------- Header ---------- */
+  .header{
+    background:linear-gradient(135deg, var(--lilac) 0%, #B79CD1 55%, var(--plum) 130%);
+    padding:22px 20px 60px;
+    position:relative;
+    color:#fff;
+  }
+
+  .header-top{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    overflow:hidden;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  .avatar img{
+    width:78%;
+    height:78%;
+    object-fit:contain;
+  }
+
+  .brand-name{
+    font-family:'Playfair Display', serif;
+    font-size:16px;
+    font-weight:600;
+    line-height:1.2;
+  }
+
+  .brand-sub{
+    font-size:11px;
+    opacity:0.85;
+    letter-spacing:.02em;
+  }
+
+  .header-badge{
+    margin-left:auto;
+    background:rgba(255,255,255,0.22);
+    border:1px solid rgba(255,255,255,0.4);
+    border-radius:20px;
+    padding:6px 12px;
+    font-size:11px;
+    white-space:nowrap;
+  }
+
+  .hero{
+    margin-top:20px;
+    background:rgba(255,255,255,0.14);
+    border:1px solid rgba(255,255,255,0.35);
+    backdrop-filter:blur(6px);
+    border-radius:var(--radius-md);
+    padding:16px 18px;
+  }
+
+  .hero h1{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    font-style:italic;
+    font-size:19px;
+    margin:0 0 6px;
+    line-height:1.3;
+  }
+
+  .hero p{
+    margin:0;
+    font-size:12.5px;
+    opacity:0.92;
+    line-height:1.5;
+  }
+
+  /* ---------- Search + categories, overlapping header ---------- */
+  .search-wrap{
+    padding:0 20px;
+    margin-top:-34px;
+    position:relative;
+    z-index:2;
+  }
+
+  .search-bar{
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 12px 24px -10px rgba(74,46,82,0.25);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:13px 16px;
+  }
+
+  .search-bar svg{ flex-shrink:0; }
+
+  .search-bar input{
+    border:none;
+    outline:none;
+    font-family:'Outfit', sans-serif;
+    font-size:13.5px;
+    width:100%;
+    color:var(--text);
+    background:transparent;
+  }
+
+  .search-bar input::placeholder{ color:#B7A7BC; }
+
+  /* ---------- Product grid ---------- */
+  .section-title{
+    padding:14px 20px 6px;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--text-soft);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    padding:8px 20px 6px;
+  }
+
+  .product-card{
+    background:#fff;
+    border-radius:var(--radius-sm);
+    border:1px solid #F0E6F5;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+
+  .product-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 26px -14px rgba(74,46,82,0.35);
+  }
+
+  .product-thumb{
+    aspect-ratio:1 / 1;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .product-thumb img,
+  .modal-slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  /* ---------- Mini-carrossel na miniatura da grade ---------- */
+  .thumb-track{
+    display:flex;
+    width:100%;
+    height:100%;
+    transition:transform .25s ease;
+  }
+
+  .thumb-slide{
+    flex:0 0 100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+  }
+
+  .thumb-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.85);
+    color:var(--plum);
+    border:none;
+    font-size:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:2;
+    padding:0;
+    line-height:1;
+  }
+  .thumb-arrow.prev{ left:4px; }
+  .thumb-arrow.next{ right:4px; }
+
+  .thumb-dots{
+    position:absolute;
+    bottom:6px;
+    left:0;
+    right:0;
+    display:flex;
+    justify-content:center;
+    gap:4px;
+    z-index:2;
+  }
+
+  .thumb-dot{
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.65);
+    transition:background .15s ease, transform .15s ease;
+  }
+  .thumb-dot.active{
+    background:#fff;
+    transform:scale(1.4);
+  }
+
+  .product-info{
+    padding:10px 11px 12px;
+  }
+
+  .product-name{
+    font-size:12px;
+    font-weight:600;
+    line-height:1.3;
+    margin:0 0 3px;
+    color:var(--text);
+  }
+
+  .product-meta{
+    font-size:10.5px;
+    color:var(--text-soft);
+    margin:0 0 8px;
+  }
+
+  .product-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .product-price{
+    font-size:13px;
+    font-weight:700;
+    color:var(--plum);
+  }
+
+  .add-btn{
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    background:var(--pink-strong);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    font-size:16px;
+    font-weight:600;
+    box-shadow:0 6px 12px -4px rgba(226,169,196,0.7);
+    transition:transform .15s ease;
+    flex-shrink:0;
+  }
+  .add-btn:hover{ transform:scale(1.1); }
+
+  .see-more{
+    display:block;
+    width:100%;
+    text-align:center;
+    margin:6px 20px 22px;
+    padding:12px;
+    border:none;
+    border-radius:14px;
+    background:var(--lilac-soft);
+    color:var(--plum);
+    font-size:12.5px;
+    font-weight:600;
+    font-family:'Outfit', sans-serif;
+    cursor:pointer;
+    width:calc(100% - 40px);
+  }
+
+  .footer-note{
+    text-align:center;
+    font-size:10.5px;
+    color:var(--text-soft);
+    padding:0 24px 22px;
+    line-height:1.5;
+  }
+
+  .footer-note b{ color:var(--plum); }
+
+  /* placeholder thumb palettes */
+  .t1{ background:linear-gradient(145deg,#F3D9E4,#E9C3D8); }
+  .t2{ background:linear-gradient(145deg,#D9CBEA,#C9AEDD); }
+  .t3{ background:linear-gradient(145deg,#F6E6D8,#EFD3B8); }
+  .t4{ background:linear-gradient(145deg,#D7E4DA,#B9D2C1); }
+  .t5{ background:linear-gradient(145deg,#EAD9E9,#D5B7D6); }
+  .t6{ background:linear-gradient(145deg,#F0DDD1,#E3BFAD); }
+  .t7{ background:linear-gradient(145deg,#DCEAF0,#B9D3DE); }
+
+  .hidden{ display:none !important; }
+
+  /* ---------- Modal de detalhes do produto ---------- */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(51,32,58,0.55);
+    backdrop-filter:blur(2px);
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease;
+    z-index:50;
+  }
+  .overlay.open{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .modal{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    border-radius:26px 26px 0 0;
+    padding:22px 22px 26px;
+    transform:translateY(24px);
+    transition:transform .25s ease;
+    max-height:82vh;
+    overflow-y:auto;
+  }
+  .overlay.open .modal{ transform:translateY(0); }
+
+  .modal-close{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:var(--cream-2);
+    color:var(--text-soft);
+    border:none;
+    font-size:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    margin-left:auto;
+  }
+
+  .modal-carousel{
+    position:relative;
+    width:100%;
+    max-width:260px;
+    aspect-ratio:1/1;
+    margin:6px auto 14px;
+    border-radius:20px;
+    overflow:hidden;
+  }
+
+  .modal-track{
+    display:flex;
+    width:100%;
+    height:100%;
+    transition:transform .3s ease;
+  }
+
+  .modal-slide{
+    flex:0 0 100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:56px;
+    overflow:hidden;
+  }
+
+  .modal-slide img{
+    cursor:zoom-in;
+    transition:transform .25s ease;
+  }
+  .modal-slide img.zoomed{
+    cursor:zoom-out;
+    transform:scale(2.2);
+  }
+
+  .modal-zoom-hint{
+    text-align:center;
+    font-size:10px;
+    color:var(--text-soft);
+    margin:0 0 12px;
+  }
+
+  .modal-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.85);
+    color:var(--plum);
+    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    cursor:pointer;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+  }
+  .modal-arrow.prev{ left:8px; }
+  .modal-arrow.next{ right:8px; }
+
+  .modal-dots{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    margin:0 0 14px;
+  }
+
+  .modal-dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--lilac-soft);
+    cursor:pointer;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .modal-dot.active{
+    background:var(--plum);
+    transform:scale(1.3);
+  }
+
+  .modal-name{
+    font-family:'Playfair Display', serif;
+    font-size:18px;
+    font-weight:600;
+    margin:0 0 4px;
+    text-align:center;
+  }
+
+  .modal-meta{
+    text-align:center;
+    font-size:11.5px;
+    color:var(--text-soft);
+    margin:0 0 16px;
+  }
+
+  .modal-desc{
+    font-size:13px;
+    line-height:1.65;
+    color:var(--text);
+    background:var(--cream-2);
+    border-radius:16px;
+    padding:14px 16px;
+    margin:0 0 18px;
+    white-space:pre-line;
+  }
+
+  .modal-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+  }
+
+  .modal-price{
+    font-size:18px;
+    font-weight:700;
+    color:var(--plum);
+  }
+
+  .modal-buy{
+    flex:1;
+    max-width:190px;
+    text-align:center;
+    padding:13px 18px;
+    border-radius:16px;
+    background:var(--plum);
+    color:#fff;
+    font-weight:600;
+    font-size:13px;
+    text-decoration:none;
+    box-shadow:0 10px 20px -8px rgba(74,46,82,0.55);
+  }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <div class="header">
+    <div class="header-top">
+      <div class="avatar" id="avatar">
+        <!-- SEU LOGO: troque o caminho abaixo (ou coloque um arquivo
+             chamado logo.png dentro da pasta imagens/) — se o arquivo
+             não existir, cai sozinho no ícone de gatinho de placeholder -->
+        <img src="imagens/logo.png" alt="Miya & Maya Paper" id="logoImg">
+      </div>
+      <template id="logoFallback">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M5 9c0-3 2.5-5 5-5l-1 3 3-1c1 1 1 2 1 3a4 4 0 1 1-8 0Z" fill="#33203A"/>
+          <circle cx="7.3" cy="9.2" r="0.6" fill="#fff"/>
+          <circle cx="10.3" cy="9.2" r="0.6" fill="#fff"/>
+        </svg>
+      </template>
+      <div>
+        <div class="brand-name">Miya &amp; Maya Paper</div>
+        <div class="brand-sub">Clipart &amp; papelaria digital</div>
+      </div>
+      <div class="header-badge">Aberto 24h ✦</div>
+    </div>
+
+    <div class="hero">
+      <h1>Cliparts<br>pra deixar seus projetos lindos ✿</h1>
+      <p>Bundles em PNG de alta resolução: escolha, clique e receba na hora.</p>
+    </div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-bar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B7A7BC" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Buscar produto no catálogo...">
+    </div>
+  </div>
+
+  <div class="section-title" style="padding-top:20px;">Nossos kits ♡</div>
+
+  <div class="grid" id="grid">
+
+    <div class="product-card" data-cat="bundles" data-name="bundle clipart bonecas kokeshi"
+       data-price="R$ 14,90"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t1,t2,t3,t4,t5"
+       data-emoji="🪆,🪆,🪆,🪆,🪆"
+       data-images="imagens/bundle-clipart-bonecas-kokeshi/1.jpg,imagens/bundle-clipart-bonecas-kokeshi/2.jpg,imagens/bundle-clipart-bonecas-kokeshi/3.jpg,imagens/bundle-clipart-bonecas-kokeshi/4.jpg,imagens/bundle-clipart-bonecas-kokeshi/5.jpg"
+       data-desc="Bundle de clipart com bonequinhas Kokeshi em estilo aquarela suave, ótimo pra papelaria, planners e produtos de decoração. Arquivos PNG em alta resolução, fundo transparente, uso comercial permitido.">
+      <div class="product-thumb t1">🪆</div>
+      <div class="product-info">
+        <p class="product-name">Bundle Bonecas Kokeshi</p>
+        <p class="product-meta">PNG · alta resolução</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 14,90</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="floral" data-name="clipart folk art azul marinho e dourado"
+       data-price="R$ 8,90"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t2,t3,t4,t5,t6"
+       data-emoji="🎨,🎨,🎨,🎨,🎨"
+       data-images="imagens/clipart-folk-art-azul-marinho-e-dourado/1.jpg,imagens/clipart-folk-art-azul-marinho-e-dourado/2.jpg,imagens/clipart-folk-art-azul-marinho-e-dourado/3.jpg,imagens/clipart-folk-art-azul-marinho-e-dourado/4.jpg,imagens/clipart-folk-art-azul-marinho-e-dourado/5.jpg"
+       data-desc="Elementos de clipart em estilo folk art, paleta azul-marinho e dourado, com flores e motivos florais desenhados à mão. Perfeito pra convites, capas de caderno e papelaria sofisticada. PNG em alta resolução.">
+      <div class="product-thumb t2">🎨</div>
+      <div class="product-info">
+        <p class="product-name">Folk Art Azul e Dourado</p>
+        <p class="product-meta">PNG · fundo transparente</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 8,90</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="sazonais" data-name="clipart dia dos pais"
+       data-price="R$ 10,90"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t3,t4,t5,t6,t7"
+       data-emoji="👔,👔,👔,👔,👔"
+       data-images="imagens/clipart-dia-dos-pais/1.jpg,imagens/clipart-dia-dos-pais/2.jpg,imagens/clipart-dia-dos-pais/3.jpg,imagens/clipart-dia-dos-pais/4.jpg,imagens/clipart-dia-dos-pais/5.jpg"
+       data-desc="Clipart temático de Dia dos Pais com ícones charmosos (gravatas, ferramentas, cafezinho) em estilo aquarela. Ideal pra cartões, posts e papelaria comemorativa. PNG em alta resolução.">
+      <div class="product-thumb t3">👔</div>
+      <div class="product-info">
+        <p class="product-name">Clipart Dia dos Pais</p>
+        <p class="product-meta">PNG · edição sazonal</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 10,90</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="bundles" data-name="bundle clipart folk art romantico"
+       data-price="R$ 11,90"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t4,t5,t6,t7,t1"
+       data-emoji="💐,💐,💐,💐,💐"
+       data-images="imagens/bundle-clipart-folk-art-romantico/1.jpg,imagens/bundle-clipart-folk-art-romantico/2.jpg,imagens/bundle-clipart-folk-art-romantico/3.jpg,imagens/bundle-clipart-folk-art-romantico/4.jpg,imagens/bundle-clipart-folk-art-romantico/5.jpg"
+       data-desc="Bundle romântico em estilo folk art com flores, corações e ornamentos delicados. Combina lindo com papelaria de casamento, convites e cartões. Arquivos PNG em alta resolução.">
+      <div class="product-thumb t4">💐</div>
+      <div class="product-info">
+        <p class="product-name">Bundle Folk Art Romântico</p>
+        <p class="product-meta">PNG · alta resolução</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 11,90</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="bundles" data-name="bundle clipart animais do bosque baby"
+       data-price="R$ 13,90"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t5,t6,t7,t1,t2"
+       data-emoji="🦌,🦌,🦌,🦌,🦌"
+       data-images="imagens/bundle-clipart-animais-do-bosque-baby/1.jpg,imagens/bundle-clipart-animais-do-bosque-baby/2.jpg,imagens/bundle-clipart-animais-do-bosque-baby/3.jpg,imagens/bundle-clipart-animais-do-bosque-baby/4.jpg,imagens/bundle-clipart-animais-do-bosque-baby/5.jpg"
+       data-cat2="personagens"
+       data-desc="Bundle fofo com animaizinhos do bosque (cervinho, raposa, coruja e coelho) em estilo aquarela suave, perfeito pra chá de bebê e quarto infantil. PNG em alta resolução, fundo transparente.">
+      <div class="product-thumb t5">🦌</div>
+      <div class="product-info">
+        <p class="product-name">Animais do Bosque Baby</p>
+        <p class="product-meta">PNG · tema infantil</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 13,90</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="bundles" data-name="bundle clipart amigurumi de croche"
+       data-price="R$ 12,90"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t6,t7,t1,t2,t3"
+       data-emoji="🧶,🧶,🧶,🧶,🧶"
+       data-images="imagens/bundle-clipart-amigurumi-de-croche/1.jpg,imagens/bundle-clipart-amigurumi-de-croche/2.jpg,imagens/bundle-clipart-amigurumi-de-croche/3.jpg,imagens/bundle-clipart-amigurumi-de-croche/4.jpg,imagens/bundle-clipart-amigurumi-de-croche/5.jpg"
+       data-desc="Bundle de clipart inspirado em amigurumi de crochê — bichinhos fofos com textura de lã ilustrada. Ótimo pra quem trabalha com artesanato e produtos handmade. PNG em alta resolução.">
+      <div class="product-thumb t6">🧶</div>
+      <div class="product-info">
+        <p class="product-name">Bundle Amigurumi Crochê</p>
+        <p class="product-meta">PNG · alta resolução</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 12,90</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- itens extras, revelados no "ver mais" -->
+
+    <div class="product-card extra hidden" data-cat="personagens" data-name="clipart bichinhos do oceano"
+       data-price="R$ 13,50"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t7,t1,t2,t3,t4"
+       data-emoji="🐠,🐠,🐠,🐠,🐠"
+       data-images="imagens/clipart-bichinhos-do-oceano/1.jpg,imagens/clipart-bichinhos-do-oceano/2.jpg,imagens/clipart-bichinhos-do-oceano/3.jpg,imagens/clipart-bichinhos-do-oceano/4.jpg,imagens/clipart-bichinhos-do-oceano/5.jpg"
+       data-desc="Bundle com bichinhos do oceano (peixinhos, polvo, tartaruga) em estilo aquarela fofa e colorida. Ótimo pra decoração de festa e produtos infantis. PNG em alta resolução.">
+      <div class="product-thumb t7">🐠</div>
+      <div class="product-info">
+        <p class="product-name">Bichinhos do Oceano</p>
+        <p class="product-meta">PNG · alta resolução</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 13,50</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card extra hidden" data-cat="floral" data-name="bundle clipart flores de primavera em aquarela"
+       data-price="R$ 11,50"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t1,t2,t3,t4,t5"
+       data-emoji="🌸,🌸,🌸,🌸,🌸"
+       data-images="imagens/bundle-clipart-flores-de-primavera-em-aquarela/1.jpg,imagens/bundle-clipart-flores-de-primavera-em-aquarela/2.jpg,imagens/bundle-clipart-flores-de-primavera-em-aquarela/3.jpg,imagens/bundle-clipart-flores-de-primavera-em-aquarela/4.jpg,imagens/bundle-clipart-flores-de-primavera-em-aquarela/5.jpg"
+       data-desc="Bundle de flores de primavera pintadas em aquarela, tons suaves e delicados. Combina com papelaria feminina, planners e cartões. PNG em alta resolução, fundo transparente.">
+      <div class="product-thumb t1">🌸</div>
+      <div class="product-info">
+        <p class="product-name">Flores de Primavera Aquarela</p>
+        <p class="product-meta">PNG · alta resolução</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 11,50</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card extra hidden" data-cat="floral" data-name="bundle clipart peonias em aquarela"
+       data-price="R$ 9,50"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t2,t3,t4,t5,t6"
+       data-emoji="🌺,🌺,🌺,🌺,🌺"
+       data-images="imagens/bundle-clipart-peonias-em-aquarela/1.jpg,imagens/bundle-clipart-peonias-em-aquarela/2.jpg,imagens/bundle-clipart-peonias-em-aquarela/3.jpg,imagens/bundle-clipart-peonias-em-aquarela/4.jpg,imagens/bundle-clipart-peonias-em-aquarela/5.jpg"
+       data-desc="Peônias delicadas pintadas à mão em aquarela, em tons rosa e lilás. Perfeito pra convites, etiquetas e papelaria romântica. PNG em alta resolução.">
+      <div class="product-thumb t2">🌺</div>
+      <div class="product-info">
+        <p class="product-name">Peônias em Aquarela</p>
+        <p class="product-meta">PNG · alta resolução</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 9,50</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card extra hidden" data-cat="papelaria" data-name="livro de receitas editavel canva"
+       data-price="R$ 9,90"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t3,t4,t5,t6,t7"
+       data-emoji="📖,📖,📖,📖,📖"
+       data-images="imagens/livro-de-receitas-editavel-canva/1.jpg,imagens/livro-de-receitas-editavel-canva/2.jpg,imagens/livro-de-receitas-editavel-canva/3.jpg,imagens/livro-de-receitas-editavel-canva/4.jpg,imagens/livro-de-receitas-editavel-canva/5.jpg"
+       data-desc="Template de livro de receitas totalmente editável no Canva — capa, índice e páginas de receita prontas pra personalizar com suas próprias fotos e textos. Ideal pra vender pronto ou usar como brinde.">
+      <div class="product-thumb t3">📖</div>
+      <div class="product-info">
+        <p class="product-name">Livro de Receitas (Canva)</p>
+        <p class="product-meta">Template editável</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 9,90</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card extra hidden" data-cat="sazonais" data-name="clipart casamento azul serenity"
+       data-price="R$ 10,50"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t4,t5,t6,t7,t1"
+       data-emoji="💍,💍,💍,💍,💍"
+       data-images="imagens/clipart-casamento-azul-serenity/1.jpg,imagens/clipart-casamento-azul-serenity/2.jpg,imagens/clipart-casamento-azul-serenity/3.jpg,imagens/clipart-casamento-azul-serenity/4.jpg,imagens/clipart-casamento-azul-serenity/5.jpg"
+       data-desc="Clipart de casamento em azul serenity, com flores, folhagens e detalhes delicados. Perfeito pra convites e papelaria de casamento com essa paleta. PNG em alta resolução.">
+      <div class="product-thumb t4">💍</div>
+      <div class="product-info">
+        <p class="product-name">Casamento Azul Serenity</p>
+        <p class="product-meta">PNG · alta resolução</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 10,50</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card extra hidden" data-cat="personagens" data-name="clipart bichinhos da fazenda"
+       data-price="R$ 12,50"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t5,t6,t7,t1,t2"
+       data-emoji="🐓,🐓,🐓,🐓,🐓"
+       data-images="imagens/clipart-bichinhos-da-fazenda/1.jpg,imagens/clipart-bichinhos-da-fazenda/2.jpg,imagens/clipart-bichinhos-da-fazenda/3.jpg,imagens/clipart-bichinhos-da-fazenda/4.jpg,imagens/clipart-bichinhos-da-fazenda/5.jpg"
+       data-desc="Bundle de animaizinhos da fazenda (galinha, vaquinha, porquinho) em estilo aquarela fofa. Ótimo pra festa de aniversário e produtos infantis. PNG em alta resolução.">
+      <div class="product-thumb t5">🐓</div>
+      <div class="product-info">
+        <p class="product-name">Bichinhos da Fazenda</p>
+        <p class="product-meta">PNG · alta resolução</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 12,50</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card extra hidden" data-cat="bundles" data-name="bundle clipart unicornio"
+       data-price="R$ 12,90"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t6,t7,t1,t2,t3"
+       data-emoji="🦄,🦄,🦄,🦄,🦄"
+       data-images="imagens/bundle-clipart-unicornio/1.jpg,imagens/bundle-clipart-unicornio/2.jpg,imagens/bundle-clipart-unicornio/3.jpg,imagens/bundle-clipart-unicornio/4.jpg,imagens/bundle-clipart-unicornio/5.jpg"
+       data-desc="Bundle de unicórnios fofos em estilo aquarela colorida, com estrelas e nuvens. Perfeito pra festas infantis e produtos temáticos. PNG em alta resolução, fundo transparente.">
+      <div class="product-thumb t6">🦄</div>
+      <div class="product-info">
+        <p class="product-name">Bundle Unicórnio</p>
+        <p class="product-meta">PNG · tema infantil</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 12,90</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card extra hidden" data-cat="personagens" data-name="clipart gansinha morango"
+       data-price="R$ 13,90"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t7,t1,t2,t3,t4"
+       data-emoji="🍓,🍓,🍓,🍓,🍓"
+       data-images="imagens/clipart-gansinha-morango/1.jpg,imagens/clipart-gansinha-morango/2.jpg,imagens/clipart-gansinha-morango/3.jpg,imagens/clipart-gansinha-morango/4.jpg,imagens/clipart-gansinha-morango/5.jpg"
+       data-desc="Personagem exclusiva: uma gansinha fofa em tema morango, ilustrada em aquarela suave. Ótima pra criar uma linha de produtos com identidade própria. PNG em alta resolução.">
+      <div class="product-thumb t7">🍓</div>
+      <div class="product-info">
+        <p class="product-name">Gansinha Morango</p>
+        <p class="product-meta">PNG · personagem exclusiva</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 13,90</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card extra hidden" data-cat="personagens" data-name="clipart menina do jardim de morangos"
+       data-price="R$ 13,90"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t1,t2,t3,t4,t5"
+       data-emoji="🍓,🍓,🍓,🍓,🍓"
+       data-images="imagens/clipart-menina-do-jardim-de-morangos/1.jpg,imagens/clipart-menina-do-jardim-de-morangos/2.jpg,imagens/clipart-menina-do-jardim-de-morangos/3.jpg,imagens/clipart-menina-do-jardim-de-morangos/4.jpg,imagens/clipart-menina-do-jardim-de-morangos/5.jpg"
+       data-desc="Menininha do jardim de morangos, em estilo aquarela delicado, cercada de flores e frutinhas. Ótima pra papelaria infantil e produtos de festa. PNG em alta resolução.">
+      <div class="product-thumb t1">🍓</div>
+      <div class="product-info">
+        <p class="product-name">Menina do Jardim de Morangos</p>
+        <p class="product-meta">PNG · personagem exclusiva</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 13,90</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card extra hidden" data-cat="floral" data-name="clipart jardim das fadas"
+       data-price="R$ 11,90"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t2,t3,t4,t5,t6"
+       data-emoji="🧚,🧚,🧚,🧚,🧚"
+       data-images="imagens/clipart-jardim-das-fadas/1.jpg,imagens/clipart-jardim-das-fadas/2.jpg,imagens/clipart-jardim-das-fadas/3.jpg,imagens/clipart-jardim-das-fadas/4.jpg,imagens/clipart-jardim-das-fadas/5.jpg"
+       data-desc="Bundle de jardim das fadas com fadinhas, cogumelos e flores em estilo aquarela mágico. Perfeito pra produtos infantis e decoração de festa. PNG em alta resolução.">
+      <div class="product-thumb t2">🧚</div>
+      <div class="product-info">
+        <p class="product-name">Jardim das Fadas</p>
+        <p class="product-meta">PNG · alta resolução</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 11,90</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card extra hidden" data-cat="bundles" data-name="bundle clipart ursinho papercut"
+       data-price="R$ 12,50"
+       data-link="https://www.etsy.com/shop/MiyaeMayaPaper"
+       data-thumb="t3,t4,t5,t6,t7"
+       data-emoji="🧸,🧸,🧸,🧸,🧸"
+       data-images="imagens/bundle-clipart-ursinho-papercut/1.jpg,imagens/bundle-clipart-ursinho-papercut/2.jpg,imagens/bundle-clipart-ursinho-papercut/3.jpg,imagens/bundle-clipart-ursinho-papercut/4.jpg,imagens/bundle-clipart-ursinho-papercut/5.jpg"
+       data-desc="Bundle de ursinho bebê em estilo papercut (recorte de papel), textura suave e fofa. Ideal pra chá de bebê e quarto infantil. PNG em alta resolução, fundo transparente.">
+      <div class="product-thumb t3">🧸</div>
+      <div class="product-info">
+        <p class="product-name">Ursinho Papercut</p>
+        <p class="product-meta">PNG · tema infantil</p>
+        <div class="product-footer">
+          <span class="product-price">R$ 12,50</span>
+          <span class="add-btn">＋</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="see-more" id="seeMoreBtn">Ver mais produtos (11 restantes) →</button>
+
+  <div class="footer-note">
+    ✿ Feito com carinho por <b>Miya &amp; Maya Paper</b> — clique em um produto pra ver a descrição completa antes de comprar.
+  </div>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-carousel" id="modalCarousel">
+      <div class="modal-track" id="modalTrack"></div>
+      <button class="modal-arrow prev" id="modalPrev">‹</button>
+      <button class="modal-arrow next" id="modalNext">›</button>
+    </div>
+    <div class="modal-dots" id="modalDots"></div>
+    <p class="modal-zoom-hint">toque na foto pra dar zoom 🔍</p>
+    <p class="modal-name" id="modalName"></p>
+    <p class="modal-meta" id="modalMeta"></p>
+    <p class="modal-desc" id="modalDesc"></p>
+    <div class="modal-footer">
+      <span class="modal-price" id="modalPrice"></span>
+      <a class="modal-buy" id="modalBuy" href="#" target="_blank" rel="noopener">Comprar agora →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // se imagens/logo.png ainda não existir, volta pro ícone de gatinho
+  // (checa os dois casos: a imagem falha depois que a página carrega,
+  // ou já tinha falhado antes desse script rodar)
+  const logoImg = document.getElementById('logoImg');
+  function useLogoFallback(){
+    const fallback = document.getElementById('logoFallback').content.cloneNode(true);
+    logoImg.replaceWith(fallback);
+  }
+  if (logoImg.complete && logoImg.naturalWidth === 0){
+    useLogoFallback();
+  } else {
+    logoImg.addEventListener('error', useLogoFallback);
+  }
+
+  const cards = document.querySelectorAll('.product-card');
+  const searchInput = document.getElementById('searchInput');
+  const seeMoreBtn = document.getElementById('seeMoreBtn');
+  let showAll = false;
+
+  // Monta o mini-carrossel dentro da miniatura de cada card (grade),
+  // usando as fotos reais de data-images quando existirem — com fallback
+  // automático pro placeholder de emoji/gradiente se a foto não carregar.
+  cards.forEach(card => {
+    const thumbs = card.dataset.thumb.split(',');
+    const emojis = card.dataset.emoji.split(',');
+    const images = card.dataset.images
+      ? card.dataset.images.split(',').map(s => s.trim()).filter(Boolean)
+      : [];
+    const count = thumbs.length;
+    const thumbEl = card.querySelector('.product-thumb');
+    const productName = card.querySelector('.product-name').textContent;
+
+    const slidesHtml = thumbs.map((t, i) => {
+      if (images[i]){
+        return `<div class="thumb-slide ${t}" data-fallback="${emojis[i] || emojis[0]}"><img src="${images[i]}" alt="${productName}"></div>`;
+      }
+      return `<div class="thumb-slide ${t}">${emojis[i] || emojis[0]}</div>`;
+    }).join('');
+
+    const arrowsHtml = count > 1
+      ? '<button class="thumb-arrow prev" type="button">‹</button><button class="thumb-arrow next" type="button">›</button>'
+      : '';
+    const dotsHtml = count > 1
+      ? `<div class="thumb-dots">${thumbs.map((_, i) => `<span class="thumb-dot${i === 0 ? ' active' : ''}"></span>`).join('')}</div>`
+      : '';
+
+    thumbEl.innerHTML = `<div class="thumb-track">${slidesHtml}</div>${arrowsHtml}${dotsHtml}`;
+
+    thumbEl.querySelectorAll('.thumb-slide img').forEach(img => {
+      img.addEventListener('error', () => {
+        const slide = img.closest('.thumb-slide');
+        slide.innerHTML = '';
+        slide.textContent = slide.dataset.fallback || '';
+      });
+    });
+
+    const track = thumbEl.querySelector('.thumb-track');
+    const dots = thumbEl.querySelectorAll('.thumb-dot');
+    let idx = 0;
+
+    function goTo(i){
+      idx = (i + count) % count;
+      track.style.transform = `translateX(-${idx * 100}%)`;
+      dots.forEach((d, di) => d.classList.toggle('active', di === idx));
+    }
+
+    const prevBtn = thumbEl.querySelector('.thumb-arrow.prev');
+    const nextBtn = thumbEl.querySelector('.thumb-arrow.next');
+    if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(idx - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(idx + 1); });
+
+    // swipe no touch — marca card._thumbDragging pra evitar abrir o
+    // card de detalhes sem querer no meio de um arrasto
+    let touchStartX = null;
+    thumbEl.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      card._thumbDragging = false;
+    });
+    thumbEl.addEventListener('touchmove', (e) => {
+      if (touchStartX === null) return;
+      if (Math.abs(e.touches[0].clientX - touchStartX) > 10) card._thumbDragging = true;
+    });
+    thumbEl.addEventListener('touchend', (e) => {
+      if (touchStartX === null) return;
+      const diff = e.changedTouches[0].clientX - touchStartX;
+      if (diff > 30) goTo(idx - 1);
+      else if (diff < -30) goTo(idx + 1);
+      if (card._thumbDragging) e.stopPropagation();
+      touchStartX = null;
+    });
+  });
+
+  function applyFilters(){
+    const term = searchInput.value.trim().toLowerCase();
+    cards.forEach(card => {
+      const isExtra = card.classList.contains('extra');
+      if (isExtra && !showAll){
+        card.classList.add('hidden');
+        return;
+      }
+      const matchesSearch = card.dataset.name.includes(term);
+      card.classList.toggle('hidden', !matchesSearch);
+    });
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+
+  seeMoreBtn.addEventListener('click', () => {
+    showAll = true;
+    seeMoreBtn.classList.add('hidden');
+    applyFilters();
+  });
+
+  /* ---------- Modal de detalhes do produto ---------- */
+  const overlay = document.getElementById('overlay');
+  const modalTrack = document.getElementById('modalTrack');
+  const modalDots = document.getElementById('modalDots');
+  const modalPrev = document.getElementById('modalPrev');
+  const modalNext = document.getElementById('modalNext');
+  const modalName = document.getElementById('modalName');
+  const modalMeta = document.getElementById('modalMeta');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalPrice = document.getElementById('modalPrice');
+  const modalBuy = document.getElementById('modalBuy');
+
+  let slideCount = 1;
+  let currentSlide = 0;
+
+  function goToSlide(i){
+    currentSlide = (i + slideCount) % slideCount;
+    modalTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+    modalDots.querySelectorAll('.modal-dot').forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === currentSlide);
+    });
+    // sair do zoom ao trocar de foto
+    modalTrack.querySelectorAll('img.zoomed').forEach(img => img.classList.remove('zoomed'));
+  }
+
+  function attachZoom(img){
+    img.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (img.classList.contains('zoomed')){
+        img.classList.remove('zoomed');
+      } else {
+        const rect = img.getBoundingClientRect();
+        const originX = ((e.clientX - rect.left) / rect.width) * 100;
+        const originY = ((e.clientY - rect.top) / rect.height) * 100;
+        img.style.transformOrigin = `${originX}% ${originY}%`;
+        img.classList.add('zoomed');
+      }
+    });
+  }
+
+  function openModal(card){
+    // se data-images tiver links/caminhos de foto reais, usa <img>;
+    // se uma foto não carregar (caminho ainda não existe), o próprio
+    // slide volta sozinho pro placeholder de emoji + gradiente
+    const thumbs = card.dataset.thumb.split(',');
+    const emojis = card.dataset.emoji.split(',');
+    const realImages = card.dataset.images
+      ? card.dataset.images.split(',').map(s => s.trim()).filter(Boolean)
+      : [];
+
+    let slidesHtml;
+    if (realImages.length){
+      slideCount = realImages.length;
+      slidesHtml = realImages.map((src, i) =>
+        `<div class="modal-slide ${thumbs[i] || thumbs[0]}" data-fallback="${emojis[i] || emojis[0]}"><img src="${src}" alt=""></div>`
+      );
+    } else {
+      slideCount = thumbs.length;
+      slidesHtml = thumbs.map((t, i) => `<div class="modal-slide ${t}">${emojis[i] || emojis[0]}</div>`);
+    }
+    currentSlide = 0;
+
+    modalTrack.innerHTML = slidesHtml.join('');
+    modalTrack.style.transform = 'translateX(0)';
+
+    modalTrack.querySelectorAll('.modal-slide img').forEach(img => {
+      img.addEventListener('error', () => {
+        const slide = img.closest('.modal-slide');
+        slide.textContent = slide.dataset.fallback || '';
+      });
+      attachZoom(img);
+    });
+
+    modalDots.innerHTML = Array.from({ length: slideCount }, (_, i) =>
+      `<div class="modal-dot${i === 0 ? ' active' : ''}" data-i="${i}"></div>`
+    ).join('');
+    modalDots.querySelectorAll('.modal-dot').forEach(dot => {
+      dot.addEventListener('click', () => goToSlide(Number(dot.dataset.i)));
+    });
+
+    const showArrows = slideCount > 1;
+    modalPrev.style.display = showArrows ? 'flex' : 'none';
+    modalNext.style.display = showArrows ? 'flex' : 'none';
+    modalDots.style.display = showArrows ? 'flex' : 'none';
+
+    modalName.textContent = card.querySelector('.product-name').textContent;
+    modalMeta.textContent = card.querySelector('.product-meta').textContent;
+    modalDesc.textContent = card.dataset.desc;
+    modalPrice.textContent = card.dataset.price;
+    modalBuy.href = card.dataset.link;
+    overlay.classList.add('open');
+  }
+
+  function closeModal(){
+    overlay.classList.remove('open');
+  }
+
+  modalPrev.addEventListener('click', () => goToSlide(currentSlide - 1));
+  modalNext.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+  /* swipe no carrossel (mobile) */
+  let touchStartX = null;
+  modalTrack.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  });
+  modalTrack.addEventListener('touchend', (e) => {
+    if (touchStartX === null) return;
+    const diff = e.changedTouches[0].clientX - touchStartX;
+    if (diff > 40) goToSlide(currentSlide - 1);
+    else if (diff < -40) goToSlide(currentSlide + 1);
+    touchStartX = null;
+  });
+
+  // clicar em qualquer parte do card — inclusive o botão "+" — abre o
+  // card de detalhes (carrossel com zoom, descrição e botão de compra).
+  // Só não abre se o clique veio de um arrasto no mini-carrossel da grade.
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      if (card._thumbDragging){
+        card._thumbDragging = false;
+        return;
+      }
+      openModal(card);
+    });
+  });
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+</script>
+
+</body>
+</html>
